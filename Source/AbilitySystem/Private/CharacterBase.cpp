@@ -17,6 +17,7 @@ ACharacterBase::ACharacterBase()
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+	bIsDead = false;
 	AttributeSetBaseComponent->OnHealthChanged.AddDynamic(this, &ACharacterBase::OnHealthChanged);
 }
 
@@ -54,6 +55,11 @@ void ACharacterBase::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcqui
 
 void ACharacterBase::OnHealthChanged(float Health, float MaxHealth)
 {
+	if (!bIsDead && Health <= 0.0f)
+	{
+		bIsDead = true;
+		BP_Die();
+	}
 	BP_OnHealthChanged(Health, MaxHealth);
 }
 

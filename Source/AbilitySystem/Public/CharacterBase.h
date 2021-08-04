@@ -22,6 +22,11 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
 	UAttributeSetBase* AttributeSetBaseComponent;
+
+protected:
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+	bool bIsDead;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -48,4 +53,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnHealthChanged"))
 	void BP_OnHealthChanged(float Health, float MaxHealth);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "Die"))
+	void BP_Die();
 };

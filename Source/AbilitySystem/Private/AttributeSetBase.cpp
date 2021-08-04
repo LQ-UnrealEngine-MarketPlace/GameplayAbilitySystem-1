@@ -13,7 +13,11 @@ void UAttributeSetBase::PostGameplayEffectExecute(const struct FGameplayEffectMo
 {
 	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<FProperty>(StaticClass(), GET_MEMBER_NAME_CHECKED(UAttributeSetBase, Health)))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Character took some damge! Health now equals to [%f]"), Health.GetCurrentValue());
+		Health.SetCurrentValue(FMath::Clamp(Health.GetCurrentValue(), 0.0f, MaxHealth.GetCurrentValue()));
+		Health.SetBaseValue(FMath::Clamp(Health.GetBaseValue(), 0.0f, MaxHealth.GetBaseValue()));
+		
+		UE_LOG(LogTemp, Warning, TEXT("Character took some damage! Health now equals to [%f]"), Health.GetCurrentValue());
+		
 		OnHealthChanged.Broadcast(Health.GetCurrentValue(), MaxHealth.GetCurrentValue());
 	}
 }
