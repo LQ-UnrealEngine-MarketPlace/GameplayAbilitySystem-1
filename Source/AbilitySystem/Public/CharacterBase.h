@@ -27,10 +27,15 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
 	bool bIsDead;
-	
+
+		
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+	uint8 TeamID;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void Dead();
 
 public:
 	
@@ -49,11 +54,19 @@ public:
 	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
 
 	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
-	void OnHealthChanged(float Health, float MaxHealth);
+	void OnHealthChanged(float Health, float MaxHealth);	
+	
+	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
+	bool IsOtherHostile(ACharacterBase* Other);
+
+	uint8 GetTeamID() const;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnHealthChanged"))
 	void BP_OnHealthChanged(float Health, float MaxHealth);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "Die"))
 	void BP_Die();
+	
+
+	void AutoDeterminateTeamIDByControllerType();
 };
