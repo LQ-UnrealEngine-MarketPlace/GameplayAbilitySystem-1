@@ -9,6 +9,8 @@
 #include "AbilitySystemComponent.h"
 #include "CharacterBase.generated.h"
 
+class UAttributeSetBase;
+
 UCLASS()
 class ABILITYSYSTEM_API ACharacterBase : public ACharacter, public IAbilitySystemInterface
 {
@@ -18,6 +20,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
 	UAbilitySystemComponent* AbilitySystemComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+	UAttributeSetBase* AttributeSetBaseCopmonent;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

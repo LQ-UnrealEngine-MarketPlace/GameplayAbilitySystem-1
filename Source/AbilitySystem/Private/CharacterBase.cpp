@@ -2,6 +2,7 @@
 
 
 #include "CharacterBase.h"
+#include "AttributeSetBase.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -9,6 +10,7 @@ ACharacterBase::ACharacterBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>("AbilitySystemComponent");
+	AttributeSetBaseCopmonent = CreateDefaultSubobject<UAttributeSetBase>("AttributeSetBaseComponent");
 }
 
 // Called when the game starts or when spawned
