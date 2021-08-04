@@ -5,7 +5,7 @@
 #include "GameplayEffectExtension.h"
 #include "GameplayEffect.h"
 
-UAttributeSetBase::UAttributeSetBase() : Health(200.0f)
+UAttributeSetBase::UAttributeSetBase() : Health(200.0f), MaxHealth(200.0f)
 {
 }
 
@@ -14,5 +14,6 @@ void UAttributeSetBase::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<FProperty>(StaticClass(), GET_MEMBER_NAME_CHECKED(UAttributeSetBase, Health)))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Character took some damge! Health now equals to [%f]"), Health.GetCurrentValue());
+		OnHealthChanged.Broadcast(Health.GetCurrentValue(), MaxHealth.GetCurrentValue());
 	}
 }

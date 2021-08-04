@@ -21,7 +21,7 @@ public:
 	UAbilitySystemComponent* AbilitySystemComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
-	UAttributeSetBase* AttributeSetBaseCopmonent;
+	UAttributeSetBase* AttributeSetBaseComponent;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -43,4 +43,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
 	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
 
+	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
+	void OnHealthChanged(float Health, float MaxHealth);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnHealthChanged"))
+	void BP_OnHealthChanged(float Health, float MaxHealth);
 };
