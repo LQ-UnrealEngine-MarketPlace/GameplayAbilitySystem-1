@@ -25,6 +25,8 @@ void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	AttributeSetBaseComponent->OnHealthChanged.AddDynamic(this, &ACharacterBase::OnHealthChanged);
+	AttributeSetBaseComponent->OnManaChanged.AddDynamic(this, &ACharacterBase::OnManaChanged);
+	AttributeSetBaseComponent->OnStrengthChanged.AddDynamic(this, &ACharacterBase::OnStrengthChanged);
 	AutoDeterminateTeamIDByControllerType();
 }
 
@@ -89,6 +91,16 @@ void ACharacterBase::OnHealthChanged(float Health, float MaxHealth)
 		Dead();
 	}
 	BP_OnHealthChanged(Health, MaxHealth);
+}
+
+void ACharacterBase::OnManaChanged(float Mana, float MaxMana)
+{
+	BP_OnManaChanged(Mana, MaxMana);
+}
+
+void ACharacterBase::OnStrengthChanged(float Strength, float MaxStrength)
+{
+	BP_OnStrengthChanged(Strength, MaxStrength);
 }
 
 bool ACharacterBase::IsOtherHostile(ACharacterBase* Other)

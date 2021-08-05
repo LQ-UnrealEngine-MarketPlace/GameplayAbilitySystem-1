@@ -5,7 +5,8 @@
 #include "GameplayEffectExtension.h"
 #include "GameplayEffect.h"
 
-UAttributeSetBase::UAttributeSetBase() : Health(200.0f), MaxHealth(200.0f)
+UAttributeSetBase::UAttributeSetBase()
+: Health(200.0f), MaxHealth(200.0f), Mana(100.0f), MaxMana(150.0f), Strength(250.0f), MaxStrength(250.0f)
 {
 }
 
@@ -15,9 +16,20 @@ void UAttributeSetBase::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	{
 		Health.SetCurrentValue(FMath::Clamp(Health.GetCurrentValue(), 0.0f, MaxHealth.GetCurrentValue()));
 		Health.SetBaseValue(FMath::Clamp(Health.GetBaseValue(), 0.0f, MaxHealth.GetBaseValue()));
-		
-		UE_LOG(LogTemp, Warning, TEXT("Character took some damage! Health now equals to [%f]"), Health.GetCurrentValue());
-		
 		OnHealthChanged.Broadcast(Health.GetCurrentValue(), MaxHealth.GetCurrentValue());
+	}
+	
+	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<FProperty>(StaticClass(), GET_MEMBER_NAME_CHECKED(UAttributeSetBase, Mana)))
+	{
+		Mana.SetCurrentValue(FMath::Clamp(Mana.GetCurrentValue(), 0.0f, MaxMana.GetCurrentValue()));
+		Mana.SetBaseValue(FMath::Clamp(Mana.GetBaseValue(), 0.0f, MaxMana.GetBaseValue()));
+		OnManaChanged.Broadcast(Mana.GetCurrentValue(), MaxMana.GetCurrentValue());
+	}
+
+	if (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<FProperty>(StaticClass(), GET_MEMBER_NAME_CHECKED(UAttributeSetBase, Strength)))
+	{
+		Strength.SetCurrentValue(FMath::Clamp(Strength.GetCurrentValue(), 0.0f, MaxStrength.GetCurrentValue()));
+		Strength.SetBaseValue(FMath::Clamp(Strength.GetBaseValue(), 0.0f, MaxStrength.GetBaseValue()));
+		OnStrengthChanged.Broadcast(Strength.GetCurrentValue(), MaxStrength.GetCurrentValue());
 	}
 }

@@ -51,18 +51,30 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
-	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
-
-	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
-	void OnHealthChanged(float Health, float MaxHealth);	
+	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);	
 	
 	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
 	bool IsOtherHostile(ACharacterBase* Other);
 
 	uint8 GetTeamID() const;
 
+	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
+	void OnHealthChanged(float Health, float MaxHealth);	
+
+	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
+	void OnManaChanged(float Mana, float MaxMana);	
+
+	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
+	void OnStrengthChanged(float Strength, float MaxStrength);
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnHealthChanged"))
 	void BP_OnHealthChanged(float Health, float MaxHealth);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnManaChanged"))
+	void BP_OnManaChanged(float Mana, float MaxMana);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnStrengthChanged"))
+	void BP_OnStrengthChanged(float Strength, float MaxStrength);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "Die"))
 	void BP_Die();
