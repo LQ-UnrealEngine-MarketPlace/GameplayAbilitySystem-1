@@ -28,6 +28,8 @@ void ACharacterBase::BeginPlay()
 	AttributeSetBaseComponent->OnManaChanged.AddDynamic(this, &ACharacterBase::OnManaChanged);
 	AttributeSetBaseComponent->OnStrengthChanged.AddDynamic(this, &ACharacterBase::OnStrengthChanged);
 	AutoDeterminateTeamIDByControllerType();
+	AddGameplayTag(FullHealthTag);
+	
 }
 
 void ACharacterBase::Dead()
@@ -96,6 +98,17 @@ void ACharacterBase::OnHealthChanged(float Health, float MaxHealth)
 void ACharacterBase::OnManaChanged(float Mana, float MaxMana)
 {
 	BP_OnManaChanged(Mana, MaxMana);
+}
+
+void ACharacterBase::AddGameplayTag(FGameplayTag& TagToAdd)
+{
+	GetAbilitySystemComponent()->AddLooseGameplayTag(TagToAdd);
+	GetAbilitySystemComponent()->SetTagMapCount(TagToAdd, 1);
+}
+
+void ACharacterBase::RemoveGameplayTag(FGameplayTag& TagToRemove)
+{
+	GetAbilitySystemComponent()->RemoveLooseGameplayTag(TagToRemove);
 }
 
 void ACharacterBase::OnStrengthChanged(float Strength, float MaxStrength)

@@ -23,6 +23,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
 	UAttributeSetBase* AttributeSetBaseComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+	FGameplayTag FullHealthTag;
+
 protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
@@ -62,7 +65,13 @@ public:
 	void OnHealthChanged(float Health, float MaxHealth);	
 
 	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
-	void OnManaChanged(float Mana, float MaxMana);	
+	void OnManaChanged(float Mana, float MaxMana);		
+
+	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
+	void AddGameplayTag(FGameplayTag& TagToAdd);			
+
+	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
+	void RemoveGameplayTag(FGameplayTag& TagToRemove);	
 
 	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
 	void OnStrengthChanged(float Strength, float MaxStrength);
