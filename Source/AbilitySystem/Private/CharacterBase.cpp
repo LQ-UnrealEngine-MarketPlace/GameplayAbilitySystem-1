@@ -35,6 +35,15 @@ void ACharacterBase::BeginPlay()
 void ACharacterBase::Dead()
 {
 	bIsDead = true;
+
+	DisableInputControl();
+
+	BP_Die();
+}
+
+void ACharacterBase::DisableInputControl() const
+{
+	if (bIsDead) return;;
 	
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController)
@@ -49,9 +58,25 @@ void ACharacterBase::Dead()
 			AIController->GetBrainComponent()->StopLogic("Death");
 		}
 	}
+}
 
-	BP_Die();
-
+void ACharacterBase::EnableInputControl() const
+{
+	if (bIsDead) return;;
+	
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		PlayerController->EnableInput(PlayerController);
+	}
+	else
+	{
+		AAIController* AIController = Cast<AAIController>(GetController());
+		if (AIController)
+		{
+			AIController->GetBrainComponent()->RestartLogic();
+		}
+	}
 }
 
 // Called every frame
@@ -114,6 +139,13 @@ void ACharacterBase::RemoveGameplayTag(FGameplayTag& TagToRemove)
 void ACharacterBase::OnStrengthChanged(float Strength, float MaxStrength)
 {
 	BP_OnStrengthChanged(Strength, MaxStrength);
+}
+
+void ACharacterBase::HitStun(float StunDuration)
+{
+	DisableInputControl();
+	if (StunTimerHandle.IsValid()) GetWorldTimerManager().ClearTimer(StunTimerHandle);
+	GetWorldTimerManager().SetTimer(StunTimerHandle, this, &ACharacterBase::EnableInputControl, StunDuration, false);	
 }
 
 bool ACharacterBase::IsOtherHostile(ACharacterBase* Other)

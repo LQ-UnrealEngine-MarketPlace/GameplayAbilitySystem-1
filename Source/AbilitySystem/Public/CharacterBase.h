@@ -34,12 +34,7 @@ protected:
 		
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
 	uint8 TeamID;
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	void Dead();
-
+	FTimerHandle StunTimerHandle;
 public:
 	
 	// Sets default values for this character's properties
@@ -74,7 +69,10 @@ public:
 	void RemoveGameplayTag(FGameplayTag& TagToRemove);	
 
 	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
-	void OnStrengthChanged(float Strength, float MaxStrength);
+	void OnStrengthChanged(float Strength, float MaxStrength);	
+
+	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
+	void HitStun(float StunDuration);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnHealthChanged"))
 	void BP_OnHealthChanged(float Health, float MaxHealth);
@@ -90,4 +88,14 @@ public:
 	
 
 	void AutoDeterminateTeamIDByControllerType();
+	
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	void Dead();
+	
+	void DisableInputControl() const;
+	void EnableInputControl() const;
+
 };
