@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "AbilityTypes.h"
 #include "GameFramework/PlayerController.h"
 #include "BasePlayerController.generated.h"
 
@@ -13,5 +15,9 @@ UCLASS()
 class ABILITYSYSTEM_API ABasePlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "BasePlayerController")
+	void AddAbilityToUI(FGameplayAbilityInfo AbilityInfo);
 };

@@ -3,9 +3,12 @@
 
 #include "CharacterBase.h"
 
+#include "AbilityTypes.h"
 #include "AIController.h"
 #include "AttributeSetBase.h"
+#include "BasePlayerController.h"
 #include "BrainComponent.h"
+#include "GameplayAbilityBase.h"
 #include "GameFramework/PlayerController.h"
 
 // Sets default values
@@ -75,6 +78,20 @@ void ACharacterBase::EnableInputControl() const
 		if (AIController)
 		{
 			AIController->GetBrainComponent()->RestartLogic();
+		}
+	}
+}
+
+void ACharacterBase::AddAbilityToUI(TSubclassOf<UGameplayAbilityBase> AbilityToAdd)
+{
+		ABasePlayerController* BasePlayerController = Cast<ABasePlayerController>(GetController());
+	if (BasePlayerController)
+	{
+		UGameplayAbilityBase* AbilityInstance = AbilityToAdd.Get()->GetDefaultObject<UGameplayAbilityBase>();
+		if (AbilityInstance)
+		{
+			FGameplayAbilityInfo AbilityInfo = AbilityInstance->GetAbilityInfo();
+			BasePlayerController->AddAbilityToUI(AbilityInfo);
 		}
 	}
 }
@@ -156,6 +173,20 @@ bool ACharacterBase::IsOtherHostile(ACharacterBase* Other)
 uint8 ACharacterBase::GetTeamID() const
 {
 	return TeamID;
+}
+
+void ACharacterBase::AcquireAbilities(TArray<TSubclassOf<UGameplayAbility>> AbilitiesToAcquire)
+{
+	for (const auto AbilityItem : AbilitiesToAcquire)
+	{
+		AcquireAbility(AbilityItem);
+		
+		if (!AbilityItem->IsChildOf(UGameplayAbilityBase::StaticClass())) continue;
+
+		TSubclassOf<UGameplayAbilityBase> AbilityBaseClass = *AbilityItem;
+		if (AbilityBaseClass == nullptr) continue;
+		AddAbilityToUI(AbilityBaseClass);
+	}
 }
 
 void ACharacterBase::AutoDeterminateTeamIDByControllerType()

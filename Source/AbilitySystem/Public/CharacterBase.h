@@ -10,6 +10,7 @@
 #include "CharacterBase.generated.h"
 
 class UAttributeSetBase;
+class UGameplayAbilityBase;
 
 UCLASS()
 class ABILITYSYSTEM_API ACharacterBase : public ACharacter, public IAbilitySystemInterface
@@ -57,6 +58,9 @@ public:
 	uint8 GetTeamID() const;
 
 	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
+	void AcquireAbilities(TArray<TSubclassOf<UGameplayAbility>> AbilitiesToAcquire);	
+
+	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
 	void OnHealthChanged(float Health, float MaxHealth);	
 
 	UFUNCTION(BlueprintCallable, Category = "CaharacterBase")
@@ -97,5 +101,6 @@ protected:
 	
 	void DisableInputControl() const;
 	void EnableInputControl() const;
+	void AddAbilityToUI(TSubclassOf<UGameplayAbilityBase> AbilityToAdd);
 
 };
