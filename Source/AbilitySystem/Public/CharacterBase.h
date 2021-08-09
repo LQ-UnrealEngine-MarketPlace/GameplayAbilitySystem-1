@@ -101,6 +101,6 @@ protected:
 	
 	void DisableInputControl() const;
 	void EnableInputControl() const;
-	void AddAbilityToUI(TSubclassOf<UGameplayAbilityBase> AbilityToAdd);
+	void AddAbilityToUI(TSubclassOf<UGameplayAbilityBase> AbilityToAdd) const;
 
 };
