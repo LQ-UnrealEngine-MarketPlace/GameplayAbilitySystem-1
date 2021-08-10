@@ -5,11 +5,27 @@
 
 #include "DrawDebugHelpers.h"
 #include "Abilities/GameplayAbility.h"
+#include "Components/DecalComponent.h"
+
+AGATargetActorGroundSelect::AGATargetActorGroundSelect()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	Decal = CreateDefaultSubobject<UDecalComponent>("Decal");
+	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
+
+	SetRootComponent(RootComponent);
+	Decal->SetupAttachment(RootComponent);
+
+	Radius = 200.0f;
+	Decal->DecalSize = FVector(Radius);
+}
 
 void AGATargetActorGroundSelect::StartTargeting(UGameplayAbility* Ability)
 {
 	OwningAbility = Ability;
 	MasterPC = Cast<APlayerController>(Ability->GetOwningActorFromActorInfo()->GetInstigatorController());
+	Decal->DecalSize = FVector(Radius);
 }
 
 void AGATargetActorGroundSelect::ConfirmTargetingAndContinue()
@@ -44,14 +60,22 @@ void AGATargetActorGroundSelect::ConfirmTargetingAndContinue()
 		}
 	}
 
+	FGameplayAbilityTargetData_LocationInfo* CenterLocation = new FGameplayAbilityTargetData_LocationInfo();
+	if (Decal)
+	{
+		CenterLocation->TargetLocation.LiteralTransform = Decal->GetComponentTransform();
+		CenterLocation->TargetLocation.LocationType = EGameplayAbilityTargetingLocationType::LiteralTransform;
+	}
+
 	if (OverlappedActors.Num() > 0)
 	{
-		const FGameplayAbilityTargetDataHandle TargetData = StartLocation.MakeTargetDataHandleFromActors(OverlappedActors);
+		FGameplayAbilityTargetDataHandle TargetData = StartLocation.MakeTargetDataHandleFromActors(OverlappedActors);
+		TargetData.Add(CenterLocation);
 		TargetDataReadyDelegate.Broadcast(TargetData);
 	}
 	else
 	{
-		TargetDataReadyDelegate.Broadcast(FGameplayAbilityTargetDataHandle());
+		TargetDataReadyDelegate.Broadcast(FGameplayAbilityTargetDataHandle(CenterLocation));
 	}
 }
 
@@ -62,7 +86,7 @@ void AGATargetActorGroundSelect::Tick(float DeltaSeconds)
 	FVector LookPoint;
 	GetPlayerLookingPoint(LookPoint);
 
-	DrawDebugSphere(GetWorld(), LookPoint, Radius, 32, FColor::Red, true, -1, 0, 5.0f);
+	Decal->SetWorldLocation(LookPoint);
 }
 
 bool AGATargetActorGroundSelect::GetPlayerLookingPoint(FVector& OutViewPoint)
